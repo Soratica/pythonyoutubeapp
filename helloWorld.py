@@ -21,6 +21,8 @@ def main():
 
     youtube = googleapiclient.discovery.build(api_service_name, api_version, developerKey=api_key)
 
+    playlistID = "PLGv4KmRkyiZeU-q6IxZafIhgdA73ZFjDZ"
+
     request = youtube.playlists().list(
         part="snippet,contentDetails",
         channelId="UCsrtFSc09T8bwYHnLavtbmw",
