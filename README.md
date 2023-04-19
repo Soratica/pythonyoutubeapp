@@ -1,3 +1,3 @@
 # pythonyoutubeapp
 
-TEST
+pip3 install -r requirements.txt
