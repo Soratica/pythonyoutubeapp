@@ -2,19 +2,21 @@
 {% block title %}Youtube Music App{% endblock %}
 
 {% block content %}
-<div class="container h-100">
-  <div class="d-flex flex-row justify-content-center align-items-center" style="height: 90vh">
-    <div class="card text-start " style="width: 352px">
-      <img class="card-img-top center-cropped" src="{{ thumbnail }}" alt="Title">
-      <div class="card-body">
-        <h4 class="card-title">{{ song['snippet']['title'] }}</h4>
-        <p class="card-text">Body</p>
+  <div class="container">
+    <div class="vstack gap-3 justify-content-center align-items-center" style="height: 100vh">
+      <div>
+        <div class="card text-start " style="width: 352px">
+          <img class="card-img-top center-cropped" src="{{ thumbnail }}" alt="Title">
+          <div class="card-body">
+            <h4 class="card-title">{{ song['snippet']['title'] }}</h4>
+            <p class="card-text">Body</p>
+          </div>
+        </div>
+      </div>
+      <div>
+        <a name="" id="" class="btn btn-primary" href="#" role="button">Button</a>
+        <a name="" id="" class="btn btn-primary" href="#" role="button">Button</a>
       </div>
     </div>
   </div>
-
-</div>
-
-
-
 {% endblock %}
