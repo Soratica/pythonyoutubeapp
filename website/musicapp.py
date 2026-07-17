@@ -1,40 +1,36 @@
 import os
+from random import randint
+
 import googleapiclient.discovery
 import googleapiclient.errors
-from random import *
 
-scopes = ["https://www.googleapis.com/auth/youtube.readonly"]
+API_SERVICE_NAME = "youtube"
+API_VERSION = "v3"
 
-api_service_name = "youtube"
-api_version = "v3"
-client_secrets_file = "client_secret.json"
-DEVELOPER_KEY = "AIzaSyCDYApG2_EJCie6LDnEeoVE_JWGJmvZuaQ"
-PLAYLIST_ID = "PLGv4KmRkyiZeU-q6IxZafIhgdA73ZFjDZ"
-
-youtube = googleapiclient.discovery.build(
-    api_service_name, api_version, developerKey=DEVELOPER_KEY)
-
-request = youtube.playlistItems().list(
-    part="snippet",
-    playlistId=PLAYLIST_ID,
-    maxResults=25
-)
-response = request.execute()
 
 class MusicApp:
 
     def __init__(self):
-        self.playlist = response['items']
+        developer_key = os.environ["YOUTUBE_DEVELOPER_KEY"]
+        playlist_id = os.environ["YOUTUBE_PLAYLIST_ID"]
+
+        youtube = googleapiclient.discovery.build(
+            API_SERVICE_NAME, API_VERSION, developerKey=developer_key
+        )
+        request = youtube.playlistItems().list(
+            part="snippet",
+            playlistId=playlist_id,
+            maxResults=25
+        )
+        self.playlist = request.execute()["items"]
 
     def getRandomSong(self):
-        x = randint(0, len(self.playlist) - 1)
-        return self.playlist[x]
-        
-    def getSong(self):
-        self.playlist
+        return self.playlist[randint(0, len(self.playlist) - 1)]
 
     def getThumbnail(self, song, size):
-        thumbnails = song['snippet']['thumbnails']   
-        return thumbnails[size]['url']
+        thumbnails = song["snippet"]["thumbnails"]
+        return thumbnails[size]["url"]
 
-
+    def getVideoUrl(self, song):
+        video_id = song["snippet"]["resourceId"]["videoId"]
+        return f"https://www.youtube.com/watch?v={video_id}"

@@ -1,22 +1,53 @@
- {% extends "base.html" %}
+{% extends "base.html" %}
 {% block title %}Youtube Music App{% endblock %}
 
 {% block content %}
   <div class="container">
-    <div class="vstack gap-3 justify-content-center align-items-center" style="height: 100vh">
-      <div>
-        <div class="card text-start " style="width: 352px">
-          <img class="card-img-top center-cropped" src="{{ thumbnail }}" alt="Title">
-          <div class="card-body">
-            <h4 class="card-title">{{ song['snippet']['title'] }}</h4>
-            <p class="card-text">Body</p>
-          </div>
+    <div class="d-flex flex-column gap-3 justify-content-center align-items-center music-stage">
+      <div class="song-card" id="song-card">
+        <img class="song-thumbnail" id="song-thumbnail" src="{{ song.thumbnail }}" alt="{{ song.title }}">
+        <div class="card-body">
+          <h4 class="song-title" id="song-title">{{ song.title }}</h4>
         </div>
       </div>
-      <div>
-        <a name="" id="" class="btn btn-primary" href="#" role="button">Button</a>
-        <a name="" id="" class="btn btn-primary" href="#" role="button">Button</a>
+      <div class="d-flex gap-2">
+        <button type="button" class="btn btn-primary btn-lg" id="new-song-btn">New Song</button>
+        <a class="btn btn-outline-light btn-lg" id="youtube-link" href="{{ song.url }}" target="_blank" rel="noopener noreferrer">Open on YouTube</a>
       </div>
+      <p class="text-danger d-none" id="song-error">Couldn't load a new song. Try again.</p>
     </div>
   </div>
+
+  <script>
+    const button = document.getElementById('new-song-btn');
+    const card = document.getElementById('song-card');
+    const thumbnail = document.getElementById('song-thumbnail');
+    const title = document.getElementById('song-title');
+    const youtubeLink = document.getElementById('youtube-link');
+    const errorMessage = document.getElementById('song-error');
+
+    button.addEventListener('click', async () => {
+      button.disabled = true;
+      button.textContent = 'Loading…';
+      errorMessage.classList.add('d-none');
+      card.classList.add('song-card--fading');
+
+      try {
+        const response = await fetch('/api/random-song');
+        if (!response.ok) throw new Error('Request failed');
+        const song = await response.json();
+
+        thumbnail.src = song.thumbnail;
+        thumbnail.alt = song.title;
+        title.textContent = song.title;
+        youtubeLink.href = song.url;
+      } catch (err) {
+        errorMessage.classList.remove('d-none');
+      } finally {
+        card.classList.remove('song-card--fading');
+        button.disabled = false;
+        button.textContent = 'New Song';
+      }
+    });
+  </script>
 {% endblock %}

@@ -1,12 +1,51 @@
-/**
-* Dark blue: #2c3e50
-* Medium blue: #3498db
-* Light blue: #7fb3d5
-* Dark gray: #212121
-* Medium gray: #95a5a6
-* Light gray: #ecf0f1
-*/
+:root {
+  --accent: #7fb3d5;
+}
 
 body {
-  background-color:#ecf0f1;
+  background: radial-gradient(circle at top, #263544 0%, #14181d 65%);
+  min-height: 100vh;
+  color: #ecf0f1;
+}
+
+.navbar {
+  background-color: rgba(20, 24, 29, 0.85);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.navbar-brand {
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+main {
+  padding-top: 5.5rem;
+}
+
+.hero {
+  min-height: calc(100vh - 5.5rem);
+}
+
+.hero h1 {
+  font-weight: 700;
+  max-width: 40rem;
+}
+
+.btn-primary {
+  background-color: var(--accent);
+  border-color: var(--accent);
+  color: #14181d;
+  font-weight: 600;
+}
+
+.btn-primary:hover,
+.btn-primary:focus {
+  background-color: #6aa3c9;
+  border-color: #6aa3c9;
+  color: #14181d;
+}
+
+.btn-outline-light {
+  font-weight: 600;
 }
