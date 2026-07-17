@@ -7,6 +7,9 @@ import googleapiclient.errors
 API_SERVICE_NAME = "youtube"
 API_VERSION = "v3"
 
+# Prefer true 16:9 thumbnail sizes so the image doesn't need heavy cropping.
+THUMBNAIL_PREFERENCE = ("maxres", "medium", "standard", "high", "default")
+
 
 class MusicApp:
 
@@ -27,9 +30,12 @@ class MusicApp:
     def getRandomSong(self):
         return self.playlist[randint(0, len(self.playlist) - 1)]
 
-    def getThumbnail(self, song, size):
+    def getThumbnail(self, song, preference=THUMBNAIL_PREFERENCE):
         thumbnails = song["snippet"]["thumbnails"]
-        return thumbnails[size]["url"]
+        for size in preference:
+            if size in thumbnails:
+                return thumbnails[size]["url"]
+        raise KeyError("no thumbnail available")
 
     def getVideoUrl(self, song):
         video_id = song["snippet"]["resourceId"]["videoId"]

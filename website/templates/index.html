@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+{% block title %}Music Shuffler{% endblock %}
+
+{% block content %}
+  <div class="container">
+    <div class="d-flex flex-column align-items-center text-center gap-4 shuffle-page">
+      <div>
+        <h1>Discover something new to listen to</h1>
+        <p class="text-secondary">Pulls a random track from a curated YouTube playlist.</p>
+      </div>
+
+      <div class="song-viewport">
+        <div class="song-card" id="song-card">
+          <div class="song-thumbnail-wrap">
+            <img class="song-thumbnail" id="song-thumbnail" src="{{ song.thumbnail }}" alt="{{ song.title }}">
+          </div>
+          <div class="song-info" id="song-info">
+            <h4 class="song-title" id="song-title">{{ song.title }}</h4>
+            <p class="song-meta">
+              <span id="song-artist">{{ song.artist }}</span>
+              <span class="song-meta-dot">•</span>
+              <span id="song-date">{{ song.publishedAt }}</span>
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="d-flex gap-3 flex-wrap justify-content-center">
+        <button type="button" class="btn-modern btn-modern--primary" id="new-song-btn">
+          <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="16 3 21 3 21 8"></polyline>
+            <line x1="4" y1="20" x2="21" y2="3"></line>
+            <polyline points="21 16 21 21 16 21"></polyline>
+            <line x1="15" y1="15" x2="21" y2="21"></line>
+            <line x1="4" y1="4" x2="9" y2="9"></line>
+          </svg>
+          <span id="new-song-btn-label">New Song</span>
+        </button>
+        <a class="btn-modern btn-modern--ghost" id="youtube-link" href="{{ song.url }}" target="_blank" rel="noopener noreferrer">
+          <svg class="btn-icon" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M8 5v14l11-7z"></path>
+          </svg>
+          Open on YouTube
+        </a>
+      </div>
+      <p class="text-danger d-none" id="song-error">Couldn't load a new song. Try again.</p>
+    </div>
+  </div>
+
+  <script>
+    const button = document.getElementById('new-song-btn');
+    const buttonLabel = document.getElementById('new-song-btn-label');
+    const card = document.getElementById('song-card');
+    const thumbnail = document.getElementById('song-thumbnail');
+    const title = document.getElementById('song-title');
+    const artist = document.getElementById('song-artist');
+    const dateEl = document.getElementById('song-date');
+    const youtubeLink = document.getElementById('youtube-link');
+    const errorMessage = document.getElementById('song-error');
+
+    function waitForTransition(el) {
+      return new Promise((resolve) => {
+        el.addEventListener('transitionend', resolve, { once: true });
+      });
+    }
+
+    button.addEventListener('click', async () => {
+      button.disabled = true;
+      button.classList.add('is-loading');
+      buttonLabel.textContent = 'Shuffling…';
+      errorMessage.classList.add('d-none');
+
+      const fetchPromise = fetch('/api/random-song').then((res) => {
+        if (!res.ok) throw new Error('Request failed');
+        return res.json();
+      });
+
+      card.classList.add('slide-out');
+
+      try {
+        const [song] = await Promise.all([fetchPromise, waitForTransition(card)]);
+
+        thumbnail.src = song.thumbnail;
+        thumbnail.alt = song.title;
+        title.textContent = song.title;
+        artist.textContent = song.artist;
+        dateEl.textContent = song.publishedAt;
+        youtubeLink.href = song.url;
+
+        card.classList.remove('slide-out');
+        card.classList.add('slide-in-start');
+        void card.offsetWidth;
+        card.classList.remove('slide-in-start');
+      } catch (err) {
+        card.classList.remove('slide-out');
+        errorMessage.classList.remove('d-none');
+      } finally {
+        button.disabled = false;
+        button.classList.remove('is-loading');
+        buttonLabel.textContent = 'New Song';
+      }
+    });
+  </script>
+{% endblock %}

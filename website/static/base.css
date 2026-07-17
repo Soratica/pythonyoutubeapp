@@ -22,30 +22,3 @@ body {
 main {
   padding-top: 5.5rem;
 }
-
-.hero {
-  min-height: calc(100vh - 5.5rem);
-}
-
-.hero h1 {
-  font-weight: 700;
-  max-width: 40rem;
-}
-
-.btn-primary {
-  background-color: var(--accent);
-  border-color: var(--accent);
-  color: #14181d;
-  font-weight: 600;
-}
-
-.btn-primary:hover,
-.btn-primary:focus {
-  background-color: #6aa3c9;
-  border-color: #6aa3c9;
-  color: #14181d;
-}
-
-.btn-outline-light {
-  font-weight: 600;
-}
