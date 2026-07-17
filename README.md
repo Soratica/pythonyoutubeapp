@@ -14,9 +14,12 @@ Create a `.env` file in the project root (see `.env.example`) with:
 
 ```
 YOUTUBE_DEVELOPER_KEY=your-google-api-key-here
-YOUTUBE_PLAYLIST_ID=your-playlist-id-here
+YOUTUBE_PLAYLIST_ID=PLGv4KmRkyiZeU-q6IxZafIhgdA73ZFjDZ
 FLASK_SECRET_KEY=change-me
 ```
+
+`YOUTUBE_PLAYLIST_ID` is the curated playlist the app recommends songs from —
+only `YOUTUBE_DEVELOPER_KEY` needs to be your own.
 
 ## Run
 
